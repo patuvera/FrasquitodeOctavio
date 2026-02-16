@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Frasquito de Octavio</title>
+<title>Frasquito de Octavio ✨</title>
 
 <style>
 body{
@@ -142,34 +142,24 @@ h1{
   transition:0.2s;
 }
 
-.controls button:hover{
-  transform:scale(1.05);
-}
-
-.controls input[type=range]{
-  width:120px;
-  margin-left:10px;
+/* Escondemos el reproductor de verdad */
+#player-container {
+    display: none;
 }
 </style>
 </head>
 
 <body>
 
-<!-- Reproductor oculto -->
-<iframe 
-  id="youtubePlayer"
-  width="0"
-  height="0"
-  src="https://www.youtube.com/embed/5r4aLNqSkyE?autoplay=1&loop=1&playlist=5r4aLNqSkyE&enablejsapi=1"
-  frameborder="0"
-  allow="autoplay">
-</iframe>
+<div id="player-container">
+    <div id="youtubePlayer"></div>
+</div>
 
 <div class="container">
   <h1>Frasquito de Octavio ✨</h1>
   <div class="subtitle">Sacá un papelito cuando lo necesites 💌</div>
 
-  <div class="jar" onclick="drawNote()">
+  <div class="jar" onclick="handleJarClick()">
     <div class="lid"></div>
     <div class="glass"></div>
     <div class="tag">LOVE</div>
@@ -186,73 +176,78 @@ h1{
 
   <div id="note" class="note"></div>
 
-  <!-- Controles -->
   <div class="music-player">
     <div class="controls">
-      <button onclick="toggleMusic()" id="playBtn">⏸️ Pausa</button>
-      <input type="range" min="0" max="100" value="50" onchange="changeVolume(this.value)">
+      <button onclick="toggleMusic()" id="playBtn">▶️ Play Música</button>
+      <input type="range" min="0" max="100" value="50" oninput="changeVolume(this.value)">
     </div>
   </div>
 </div>
 
 <script>
 const frases = [
-"Sos mío 💕",
-"Estoy orgullosa de vos",
-"Te quiero PATOdalavida",
-"Todo va a salir bien",
-"Sos mi persona favorita",
-"Nunca dudes de vos",
-"Te elegiría mil veces",
-"Sos increíble",
-"Te extraño siempre",
-"Sos mi lugar seguro",
-"Confío en vos",
-"Me encanta el tiempo que paso con vos",
-"Me hacés feliz",
-"Cada vez que te escucho, mi día mejora",
-"Sos mi paz",
-"Te volvería a elegir siempre",
-"Sos lo mejor que me pasó",
-"Te pienso todo el tiempo",
-"Amo tu forma de ser",
-"Con vos todo es más lindo",
-"Gracias por aparecer en mi vida",
-"Me encantás",
-"Todo tiene sentido con vos",
-"Sos mi amor",
-"Estoy de tu lado siempre",
-"Sos único",
-"Sos mi felicidad diaria",
-"Amo estar con vos",
-"Sos mi casualidad favorita",
-"Sos mi sueño hecho realidad",
-"Te necesito cerca 🥺",
-"Sos mi todo",
-"Sos mi persona",
-"Me hacés sentir especial",
-"Sos perfecto para mí",
-"Siempre vos",
-"Sos mi destino",
-"Amo tu sonrisa",
-"Sos mi debilidad favorita",
-"Sos mi tranquilidad",
-"Me encanta tu voz",
-"Sos mi mejor decisión",
-"Siempre juntos",
-"Sos muy importante para mí",
-"Valoro el tiempo que me dedicás y el amor que me das",
-"No hay nadie como vos",
-"Me encanta tu risa",
-"Vale por una foto 👄",
-"Vale por tener la razón",
-"Vale por una peli",
-"Vale por un beso (spoiler: todos mis besos son tuyos)",
-"Sos hermoso",
-
+"Sos mío 💕", "Estoy orgullosa de vos", "Te quiero PATOdalavida", "Todo va a salir bien",
+"Sos mi persona favorita", "Nunca dudes de vos", "Te elegiría mil veces", "Sos increíble",
+"Te extraño siempre", "Sos mi lugar seguro", "Confío en vos", "Me encanta el tiempo que paso con vos",
+"Me hacés feliz", "Cada vez que te escucho, mi día mejora", "Sos mi paz", "Te volvería a elegir siempre",
+"Sos lo mejor que me pasó", "Te pienso todo el tiempo", "Amo tu forma de ser", "Con vos todo es más lindo",
+"Gracias por aparecer en mi vida", "Me encantás", "Todo tiene sentido con vos", "Sos mi amor",
+"Estoy de tu lado siempre", "Sos único", "Sos mi felicidad diaria", "Amo estar con vos",
+"Sos mi casualidad favorita", "Sos mi sueño hecho realidad", "Te necesito cerca 🥺", "Sos mi todo",
+"Sos mi persona", "Me hacés sentir especial", "Sos perfecto para mí", "Siempre vos",
+"Sos mi destino", "Amo tu sonrisa", "Sos mi debilidad favorita", "Sos mi tranquilidad",
+"Me encanta tu voz", "Sos mi mejor decisión", "Siempre juntos", "Sos muy importante para mí",
+"Valoro el tiempo que me dedicás y el amor que me das", "No hay nadie como vos", "Me encanta tu risa",
+"Vale por una foto 🫦", "Vale por tener la razón", "Vale por una peli",
+"Vale por un beso (spoiler: todos mis besos son tuyos)", "Sos hermoso",
 "Papelito VIP 👑 Vale por hacerme caso sin discutir 😌💕",
 "No todos los días aparece este papelito… como no todos los días aparece alguien como vos 💫"
 ];
+
+let player;
+let isPlaying = false;
+let firstClick = true;
+
+// 1. Cargar API de YouTube
+const tag = document.createElement('script');
+tag.src = "https://www.youtube.com/iframe_api";
+var firstScriptTag = document.getElementsByTagName('script')[0];
+firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+// 2. Crear el reproductor cuando la API esté lista
+function onYouTubeIframeAPIReady() {
+  player = new YT.Player('youtubePlayer', {
+    height: '0',
+    width: '0',
+    videoId: '5r4aLNqSkyE', // El ID de tu video
+    playerVars: {
+      'autoplay': 0,
+      'loop': 1,
+      'playlist': '5r4aLNqSkyE'
+    },
+    events: {
+      'onReady': onPlayerReady
+    }
+  });
+}
+
+function onPlayerReady(event) {
+  event.target.setVolume(50);
+}
+
+// 3. Función al hacer clic en el frasco
+function handleJarClick() {
+  // Sacar papelito
+  drawNote();
+
+  // Activar música en el primer clic si no está sonando
+  if (firstClick && player) {
+    player.playVideo();
+    isPlaying = true;
+    document.getElementById("playBtn").innerText = "⏸️ Pausa";
+    firstClick = false;
+  }
+}
 
 function drawNote(){
   const note = document.getElementById("note");
@@ -267,25 +262,6 @@ function drawNote(){
   note.style.display = "block";
 }
 
-/* YouTube Player */
-let player;
-let isPlaying = true;
-
-function onYouTubeIframeAPIReady() {
-  player = new YT.Player('youtubePlayer', {
-    events: {
-      'onReady': (event) => {
-        event.target.setVolume(50);
-      }
-    }
-  });
-}
-
-// Cargar API
-const tag = document.createElement('script');
-tag.src = "https://www.youtube.com/iframe_api";
-document.body.appendChild(tag);
-
 function toggleMusic(){
   if(!player) return;
 
@@ -296,12 +272,11 @@ function toggleMusic(){
     player.playVideo();
     document.getElementById("playBtn").innerText = "⏸️ Pausa";
   }
-
   isPlaying = !isPlaying;
 }
 
 function changeVolume(value){
-  if(player){
+  if(player) {
     player.setVolume(value);
   }
 }

@@ -6,154 +6,118 @@
 <title>Frasquito de Octavio ✨</title>
 
 <style>
-body{
-  margin:0;
-  height:100vh;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  background: linear-gradient(135deg, #f7c6cc, #e63946);
-  font-family: 'Georgia', serif;
-}
+  body {
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #f7c6cc, #e63946);
+    font-family: 'Georgia', serif;
+    overflow: hidden;
+  }
 
-.container{
-  text-align:center;
-  background: rgba(255,255,255,0.15);
-  padding:40px;
-  border-radius:25px;
-  box-shadow: 0 20px 50px rgba(0,0,0,0.2);
-  backdrop-filter: blur(10px);
-}
+  .container {
+    text-align: center;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 30px;
+    border-radius: 30px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(15px);
+    width: 90%;
+    max-width: 350px;
+  }
 
-h1{
-  margin:0;
-  color:white;
-  font-size:26px;
-}
+  h1 { margin: 0; color: white; font-size: 24px; text-shadow: 1px 1px 4px rgba(0,0,0,0.2); }
+  .subtitle { color: white; opacity: 0.9; margin: 10px 0 25px; font-size: 14px; }
 
-.subtitle{
-  color:white;
-  opacity:0.85;
-  margin:10px 0 30px;
-  font-size:15px;
-}
+  /* El Frasco */
+  .jar {
+    width: 160px;
+    height: 210px;
+    margin: 0 auto;
+    position: relative;
+    cursor: pointer;
+    transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+  .jar:active { transform: scale(0.9); }
 
-.jar{
-  width:180px;
-  height:230px;
-  margin:0 auto;
-  position:relative;
-  cursor:pointer;
-  transition:0.25s;
-}
+  .glass {
+    width: 100%;
+    height: 190px;
+    border: 4px solid #fff;
+    border-radius: 40px 40px 60px 60px;
+    background: rgba(255, 255, 255, 0.3);
+    position: absolute;
+    bottom: 0;
+  }
+  .lid {
+    width: 110%;
+    height: 25px;
+    background: #fff;
+    border-radius: 10px;
+    position: absolute;
+    top: 5px;
+    left: -5%;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  }
 
-.jar:hover{
-  transform: scale(1.05);
-}
+  .heart { position: absolute; font-size: 20px; animation: float 3s infinite ease-in-out; }
+  @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
 
-.glass{
-  width:180px;
-  height:210px;
-  border:4px solid #ffd6dc;
-  border-radius:40px 40px 55px 55px;
-  background: rgba(255,255,255,0.25);
-  position:absolute;
-  bottom:0;
-}
-
-.lid{
-  width:200px;
-  height:30px;
-  background:#ffd6dc;
-  border-radius:12px;
-  position:absolute;
-  top:0;
-  left:-10px;
-  box-shadow:0 4px 10px rgba(0,0,0,0.15);
-}
-
-.tag{
-  position:absolute;
-  top:25px;
-  left:50%;
-  transform:translateX(-50%);
-  background:white;
-  padding:4px 10px;
-  border-radius:6px;
-  font-size:12px;
-  color:#e63946;
-  box-shadow:0 2px 5px rgba(0,0,0,0.1);
-}
-
-.heart{
-  position:absolute;
-  font-size:20px;
-  animation: float 4s infinite ease-in-out;
-}
-
-@keyframes float{
-  0%{transform:translateY(0);}
-  50%{transform:translateY(-10px);}
-  100%{transform:translateY(0);}
-}
-
-.note{
-  margin-top:35px;
-  display:none;
-  background:white;
-  padding:18px;
-  border-radius:14px;
-  font-size:16px;
-  color:#b31217;
-  box-shadow:0 10px 25px rgba(0,0,0,0.15);
-  animation: pop 0.35s ease;
-  max-width:260px;
-  margin-left:auto;
-  margin-right:auto;
-}
-
-@keyframes pop{
-  from{transform:scale(0.7) translateY(10px); opacity:0;}
-  to{transform:scale(1) translateY(0); opacity:1;}
-}
-
-.gold{
-  background: linear-gradient(135deg,#d4af37,#f7e7a9);
-  color:#5a3d00;
-}
-
-/* Música */
-.music-player{
-  margin-top:25px;
-}
-
-.controls{
-  margin-top:10px;
-}
-
-.controls button{
-  background:white;
-  border:none;
-  padding:10px 18px;
-  border-radius:20px;
-  cursor:pointer;
-  font-size:14px;
-  box-shadow:0 5px 15px rgba(0,0,0,0.2);
-  transition:0.2s;
-}
-
-/* Escondemos el reproductor de verdad */
-#player-container {
+  /* Papelito */
+  .note {
+    margin-top: 25px;
     display: none;
-}
+    background: white;
+    padding: 20px;
+    border-radius: 15px;
+    font-size: 16px;
+    color: #b31217;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    animation: pop 0.4s ease forwards;
+  }
+  @keyframes pop { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+  .gold { background: linear-gradient(135deg, #d4af37, #f7e7a9); color: #5a3d00; font-weight: bold; border: 2px solid #b38728; }
+
+  /* REPRODUCTOR VISIBLE */
+  .music-card {
+    margin-top: 25px;
+    background: rgba(255, 255, 255, 0.4);
+    padding: 15px;
+    border-radius: 20px;
+  }
+  .controls {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+  button {
+    background: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 50px;
+    color: #e63946;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    width: 120px;
+  }
+  input[type=range] {
+    width: 100px;
+    accent-color: #e63946;
+  }
+  label { font-size: 12px; color: white; font-weight: bold; }
+
+  /* Escondemos el iframe de YouTube */
+  #player-container { display: none; }
 </style>
 </head>
 
 <body>
 
-<div id="player-container">
-    <div id="youtubePlayer"></div>
-</div>
+<div id="player-container"><div id="youtubePlayer"></div></div>
 
 <div class="container">
   <h1>Frasquito de Octavio ✨</h1>
@@ -162,85 +126,56 @@ h1{
   <div class="jar" onclick="handleJarClick()">
     <div class="lid"></div>
     <div class="glass"></div>
-    <div class="tag">LOVE</div>
-
-    <div class="heart" style="bottom:25px; left:25px;">💗</div>
-    <div class="heart" style="bottom:35px; left:70px;">💖</div>
-    <div class="heart" style="bottom:30px; left:115px;">💕</div>
-    <div class="heart" style="bottom:70px; left:40px;">💘</div>
-    <div class="heart" style="bottom:75px; left:95px;">💞</div>
-    <div class="heart" style="bottom:110px; left:60px;">💓</div>
-    <div class="heart" style="bottom:120px; left:115px;">💝</div>
-    <div class="heart" style="bottom:115px; left:20px;">💗</div>
+    <div class="heart" style="bottom:20px; left:20px;">💗</div>
+    <div class="heart" style="bottom:50px; left:60px;">💖</div>
+    <div class="heart" style="bottom:30px; left:100px;">💕</div>
+    <div class="heart" style="bottom:80px; left:30px;">💘</div>
   </div>
 
   <div id="note" class="note"></div>
 
-  <div class="music-player">
+  <div class="music-card">
     <div class="controls">
-      <button onclick="toggleMusic()" id="playBtn">▶️ Play Música</button>
-      <input type="range" min="0" max="100" value="50" oninput="changeVolume(this.value)">
+      <button onclick="toggleMusic()" id="playBtn">▶️ Play</button>
+      <div style="display:flex; align-items:center; gap:10px;">
+        <label>Vol:</label>
+        <input type="range" min="0" max="100" value="50" oninput="changeVolume(this.value)">
+      </div>
     </div>
   </div>
 </div>
 
 <script>
 const frases = [
-"Sos mío 💕", "Estoy orgullosa de vos", "Te quiero PATOdalavida", "Todo va a salir bien",
-"Sos mi persona favorita", "Nunca dudes de vos", "Te elegiría mil veces", "Sos increíble",
-"Te extraño siempre", "Sos mi lugar seguro", "Confío en vos", "Me encanta el tiempo que paso con vos",
-"Me hacés feliz", "Cada vez que te escucho, mi día mejora", "Sos mi paz", "Te volvería a elegir siempre",
-"Sos lo mejor que me pasó", "Te pienso todo el tiempo", "Amo tu forma de ser", "Con vos todo es más lindo",
-"Gracias por aparecer en mi vida", "Me encantás", "Todo tiene sentido con vos", "Sos mi amor",
-"Estoy de tu lado siempre", "Sos único", "Sos mi felicidad diaria", "Amo estar con vos",
-"Sos mi casualidad favorita", "Sos mi sueño hecho realidad", "Te necesito cerca 🥺", "Sos mi todo",
-"Sos mi persona", "Me hacés sentir especial", "Sos perfecto para mí", "Siempre vos",
-"Sos mi destino", "Amo tu sonrisa", "Sos mi debilidad favorita", "Sos mi tranquilidad",
-"Me encanta tu voz", "Sos mi mejor decisión", "Siempre juntos", "Sos muy importante para mí",
-"Valoro el tiempo que me dedicás y el amor que me das", "No hay nadie como vos", "Me encanta tu risa",
-"Vale por una foto 🫦", "Vale por tener la razón", "Vale por una peli",
-"Vale por un beso (spoiler: todos mis besos son tuyos)", "Sos hermoso",
-"Papelito VIP 👑 Vale por hacerme caso sin discutir 😌💕",
-"No todos los días aparece este papelito… como no todos los días aparece alguien como vos 💫"
+  "Sos mío 💕", "Estoy orgullosa de vos", "Te quiero PATOdalavida", "Todo va a salir bien",
+  "Sos mi persona favorita", "Te elegiría mil veces", "Sos mi lugar seguro", "Me hacés feliz",
+  "Sos mi paz", "Te volvería a elegir siempre", "Sos lo mejor que me pasó", "Te pienso todo el tiempo",
+  "Amo tu forma de ser", "Me encantás", "Sos mi amor", "Sos único", "Amo estar con vos",
+  "Sos mi todo", "Sos arte", "Vale por un beso", "Sos hermoso",
+  "Papelito VIP 👑 Vale por hacerme caso sin discutir 😌💕",
+  "No todos los días aparece este papelito… como no todos los días aparece alguien como vos 💫"
 ];
 
 let player;
 let isPlaying = false;
 let firstClick = true;
 
-// 1. Cargar API de YouTube
+// Cargar API de YouTube
 const tag = document.createElement('script');
 tag.src = "https://www.youtube.com/iframe_api";
-var firstScriptTag = document.getElementsByTagName('script')[0];
-firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+document.body.appendChild(tag);
 
-// 2. Crear el reproductor cuando la API esté lista
 function onYouTubeIframeAPIReady() {
   player = new YT.Player('youtubePlayer', {
-    height: '0',
-    width: '0',
-    videoId: '5r4aLNqSkyE', // El ID de tu video
-    playerVars: {
-      'autoplay': 0,
-      'loop': 1,
-      'playlist': '5r4aLNqSkyE'
-    },
-    events: {
-      'onReady': onPlayerReady
-    }
+    height: '0', width: '0', videoId: '5r4aLNqSkyE',
+    playerVars: { 'autoplay': 0, 'loop': 1, 'playlist': '5r4aLNqSkyE' },
+    events: { 'onReady': (e) => e.target.setVolume(50) }
   });
 }
 
-function onPlayerReady(event) {
-  event.target.setVolume(50);
-}
-
-// 3. Función al hacer clic en el frasco
 function handleJarClick() {
-  // Sacar papelito
   drawNote();
-
-  // Activar música en el primer clic si no está sonando
+  // Al primer toque del frasco, intentamos que la música empiece
   if (firstClick && player) {
     player.playVideo();
     isPlaying = true;
@@ -249,23 +184,20 @@ function handleJarClick() {
   }
 }
 
-function drawNote(){
+function drawNote() {
   const note = document.getElementById("note");
-  const random = Math.floor(Math.random()*frases.length);
+  const random = Math.floor(Math.random() * frases.length);
   note.className = "note";
-
-  if(frases[random].includes("VIP") || frases[random].includes("No todos")){
+  if (frases[random].includes("VIP") || frases[random].includes("No todos")) {
     note.classList.add("gold");
   }
-
   note.innerText = frases[random];
   note.style.display = "block";
 }
 
-function toggleMusic(){
-  if(!player) return;
-
-  if(isPlaying){
+function toggleMusic() {
+  if (!player) return;
+  if (isPlaying) {
     player.pauseVideo();
     document.getElementById("playBtn").innerText = "▶️ Play";
   } else {
@@ -275,10 +207,8 @@ function toggleMusic(){
   isPlaying = !isPlaying;
 }
 
-function changeVolume(value){
-  if(player) {
-    player.setVolume(value);
-  }
+function changeVolume(value) {
+  if (player) player.setVolume(value);
 }
 </script>
 
